@@ -1,51 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import EmpresasPages from "./pages/EmpresasPages";
+import EmpresaFormPage from "./pages/EmpresaFormPages";
+import LoginPage from "./components/Login";
+
+function RedirectToEmpresas() {
+  return <Navigate to="/" />;
+}
 
 function App() {
-  const [empresas, setEmpresas] = useState([]);
-  const [recuperado, setRecuperado] = useState(false);
 
-  useEffect(() => {
-    fetch('http://127.0.0.1:8000/empresas/')
-      .then((response) => response.json())
-      .then((empresa) => {
-        setEmpresas(empresa);
-        setRecuperado(true);
-      });
-  }, []);
-
-  const mostrarTabla = () => {
-    return (
-      <div>
-        <table border="1">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Nombre</th>
-              <th>Direccion</th>
-              <th>Telefono</th>
-              <th>Rutas</th>
-            </tr>
-          </thead>
-          <tbody>
-            {empresas.map((empresa) => {
-              return (
-                <tr key={empresa.id}>
-                  <td>{empresa.id}</td>
-                  <td>{empresa.nombre}</td>
-                  <td>{empresa.direccion}</td>
-                  <td>{empresa.telefono}</td>
-                  <td>{empresa.rutas}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
-  return recuperado ? mostrarTabla() : <div>Recuperando datos...</div>;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<RedirectToEmpresas />} />
+        <Route path='/empresas' element={<EmpresasPages />} />
+        <Route path='/create' element={<EmpresaFormPage />} />
+        <Route path='/login' element={<LoginPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
